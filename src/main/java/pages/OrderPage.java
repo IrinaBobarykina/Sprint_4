@@ -1,7 +1,12 @@
 package pages;
 
+import config.WebDriverConfig;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.concurrent.TimeUnit;
 
 public class OrderPage {
     WebDriver driver;
@@ -19,25 +24,79 @@ public class OrderPage {
     private final By btnNext = By.xpath(".//button[text()='Далее']");
     //Поле "Дата"
     private final By inputDate = By.xpath(".//input[@placeholder='* Когда привезти самокат']");
-    //Календарь
-    private final By pickerCalendar = By.className("react-datepicker");
-    //Конкретный день в календаре
-    private final By pickerDayInCalendar = By.className("react-datepicker__day");
     //Поле "Срок аренды"
     private final By dropdownPeriod = By.className("Dropdown-control");
-    //Список возможных сроков
-    private final By menuPeriod = By.className("Dropdown-menu");
-    //Конкретный срок
-    private final By optionPeriod= By.className("Dropdown-option");
-    //Поле "Цвет самоката"
-    private final By checkboxColour = By.className("Checkbox_Label__3wxSf");
     //Поле "Комментарий"
     private final By inputComment = By.xpath(".//input[@placeholder='Комментарий для курьера']");
     //Кнопка "Заказать"
-    private final By btnOrder = By.xpath(".//button[text()='Заказать']");
+    private final By btnOrder = By.xpath(".//button[(@class='Button_Button__ra12g Button_Middle__1CSJM') and (text()='Заказать')]");
     //Кнопка "Да" в попапе "Хотите заказать?"
     private final By btnOrderYes = By.xpath(".//button[text()='Да']");
     //Попап "Заказ оформлен"
     private final By textOrderInProcess = By.xpath(".//div[text()='Заказ оформлен']");
 
+    public OrderPage (WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void setName (String name){
+        driver.findElement(inputName).sendKeys(name);
+    }
+
+    public void setSurname (String surname){
+        driver.findElement(inputSurname).sendKeys(surname);
+    }
+
+    public void setAddress (String address){
+        driver.findElement(inputAddress).sendKeys(address);
+    }
+
+    public void chooseMetro(String metro){
+        driver.findElement(selectMetro).sendKeys(metro);
+        driver.findElement(By.xpath(".//div[text()='" + metro + "']")).click();
+    }
+
+    public void setPhoneNumber (String phoneNumber){
+        driver.findElement(inputPhone).sendKeys(phoneNumber);
+    }
+
+    public void clickNextButton() {
+        WebElement nextButton = driver.findElement(btnNext);
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",nextButton);
+        nextButton.click();
+    }
+
+    public void setDate(String date) {
+        driver.findElement(inputDate).sendKeys(date);
+
+    }
+    public void clickSomewhere(){
+        driver.findElement(By.className("App_App__15LM-")).click();
+    }
+    public void clickOnPeriod () {
+        driver.findElement(dropdownPeriod).click();
+    }
+
+    public void choosePeriod (String period) {
+        driver.findElement(By.xpath(".//div[(@class='Dropdown-option') and (text()='" + period + "')]")).click();
+    }
+
+    public void chooseColour (String colour) {
+        driver.findElement(By.xpath(".//label[(@class='Checkbox_Label__3wxSf') and (@for='" + colour + "')]")).click();
+    }
+    public void setComment(String comment) {
+        driver.findElement(inputComment).sendKeys(comment);
+    }
+
+    public void clickOrderButton(){
+        driver.findElement(btnOrder).click();
+    }
+
+    public void clickYesButton() {
+        driver.findElement(btnOrderYes).click();
+    }
+
+    public String getTextFromPopup() {
+        return driver.findElement(textOrderInProcess).getText();
+    }
 }
