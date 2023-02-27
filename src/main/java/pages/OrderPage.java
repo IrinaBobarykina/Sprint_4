@@ -1,12 +1,9 @@
 package pages;
 
-import config.WebDriverConfig;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import java.util.concurrent.TimeUnit;
 
 public class OrderPage {
     WebDriver driver;
@@ -35,60 +32,73 @@ public class OrderPage {
     //Попап "Заказ оформлен"
     private final By textOrderInProcess = By.xpath(".//div[text()='Заказ оформлен']");
 
-    public OrderPage (WebDriver driver) {
+    public OrderPage(WebDriver driver) {
         this.driver = driver;
     }
 
-    public void setName (String name){
+    public void setName(String name) {
         driver.findElement(inputName).sendKeys(name);
     }
 
-    public void setSurname (String surname){
+    public void setSurname(String surname) {
         driver.findElement(inputSurname).sendKeys(surname);
     }
 
-    public void setAddress (String address){
+    public void setAddress(String address) {
         driver.findElement(inputAddress).sendKeys(address);
     }
 
-    public void chooseMetro(String metro){
+    public void chooseMetro(String metro) {
         driver.findElement(selectMetro).sendKeys(metro);
         driver.findElement(By.xpath(".//div[text()='" + metro + "']")).click();
     }
 
-    public void setPhoneNumber (String phoneNumber){
+    public void setPhoneNumber(String phoneNumber) {
         driver.findElement(inputPhone).sendKeys(phoneNumber);
     }
 
     public void clickNextButton() {
         WebElement nextButton = driver.findElement(btnNext);
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",nextButton);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", nextButton);
         nextButton.click();
     }
 
-    public void setDate(String date) {
+    public void inputDate(String date) {
         driver.findElement(inputDate).sendKeys(date);
 
     }
-    public void clickSomewhere(){
-        driver.findElement(By.className("App_App__15LM-")).click();
+
+    public void clickSomewhere() {
+        driver.findElement(By.className("Order_Header__BZXOb")).click();
     }
-    public void clickOnPeriod () {
+
+    public void setDate(String date) {
+        inputDate(date);
+        clickSomewhere();
+    }
+
+    public void clickOnPeriod() {
         driver.findElement(dropdownPeriod).click();
     }
 
-    public void choosePeriod (String period) {
+    public void choosePeriod(String period) {
         driver.findElement(By.xpath(".//div[(@class='Dropdown-option') and (text()='" + period + "')]")).click();
     }
 
-    public void chooseColour (String colour) {
+    public void setPeriod(String period) {
+        clickOnPeriod();
+        choosePeriod(period);
+    }
+
+    public void chooseColour(String colour) {
         driver.findElement(By.xpath(".//label[(@class='Checkbox_Label__3wxSf') and (@for='" + colour + "')]")).click();
     }
+
     public void setComment(String comment) {
         driver.findElement(inputComment).sendKeys(comment);
     }
 
-    public void clickOrderButton(){
+    public void clickFinishOrderButton() {
         driver.findElement(btnOrder).click();
     }
 
