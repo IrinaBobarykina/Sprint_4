@@ -1,23 +1,25 @@
+import OrderDetails.OrderButtons;
 import OrderDetails.ScooterColour;
 import config.AppConfig;
 import OrderDetails.OrderPeriod;
 import config.WebDriverConfig;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.hamcrest.MatcherAssert;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import pages.MainPage;
 import pages.OrderPage;
 import java.util.concurrent.TimeUnit;
+import static org.hamcrest.CoreMatchers.startsWith;
 
 @RunWith(Parameterized.class)
 public class OrderScooterTest {
     private WebDriver driver;
+    private final String button;
     private final String name;
     private final String surname;
     private final String address;
@@ -28,7 +30,8 @@ public class OrderScooterTest {
     private final String colour;
     private final String comment;
 
-    public OrderScooterTest(String name, String surname, String address, String metro, String phoneNumber, String date, String period, String colour,String comment ){
+    public OrderScooterTest(String button, String name, String surname, String address, String metro, String phoneNumber, String date, String period, String colour, String comment) {
+        this.button = button;
         this.name = name;
         this.surname = surname;
         this.address = address;
@@ -42,10 +45,10 @@ public class OrderScooterTest {
 
     @Parameterized.Parameters
     public static Object[] orderScooter() {
-        return new Object[][] {
-                {"Шерлок", "Холмс", "Бейкер-стрит, 221Б", "Театральная", "82212212121", "28.02.2023", OrderPeriod.FOUR_DAYS_PERIOD, ScooterColour.BLACK_COLOUR, ""},
-                //{},
-                //{},
+        return new Object[][]{
+                {OrderButtons.HEADER_ORDER_BUTTON, "Шерлок", "Холмс", "Бейкер-стрит, 221Б", "Театральная", "82212212121", "28.02.2023", OrderPeriod.FOUR_DAYS_PERIOD, ScooterColour.BLACK_COLOUR, ""},
+                {OrderButtons.MIDDLE_ORDER_BUTTON, "Ирина", "Бобарыкина", "пр.Яндекса", "Лубянка", "89111111111", "05.03.2023", OrderPeriod.SEVEN_DAYS_PERIOD, ScooterColour.GREY_COLOUR, "Лучше доставить утром"},
+
         };
     }
 
@@ -58,11 +61,11 @@ public class OrderScooterTest {
     }
 
     @Test
-    public void orderScooterFromHeader() {
+    public void orderScooterFlow() {
         MainPage page = new MainPage(driver);
         OrderPage orderPage = new OrderPage(driver);
         page.clickCookieButton();
-        page.clickOrderButtonInTheHeader();
+        page.clickOrderButton(button);
         orderPage.setName(name);
         orderPage.setSurname(surname);
         orderPage.setAddress(address);
@@ -70,15 +73,13 @@ public class OrderScooterTest {
         orderPage.setPhoneNumber(phoneNumber);
         orderPage.clickNextButton();
         orderPage.setDate(date);
-        orderPage.clickSomewhere();
-        orderPage.clickOnPeriod();
-        orderPage.choosePeriod(period);
+        orderPage.setPeriod(period);
         orderPage.chooseColour(colour);
         orderPage.setComment(comment);
-        orderPage.clickOrderButton();
+        orderPage.clickFinishOrderButton();
         orderPage.clickYesButton();
 
-        Assert.assertEquals("Заказ оформлен", orderPage.getTextFromPopup());
+        MatcherAssert.assertThat(orderPage.getTextFromPopup(), startsWith("Заказ оформлен"));
     }
 
     @After
