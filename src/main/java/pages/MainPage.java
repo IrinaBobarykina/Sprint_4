@@ -1,5 +1,6 @@
 package pages;
 
+import OrderDetails.OrderButtons;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -14,13 +15,14 @@ public class MainPage {
     //Кнопка куки
     private final By btnCookie = By.className("App_CookieButton__3cvqF");
 
-    public MainPage (WebDriver driver) {
+    public MainPage(WebDriver driver) {
         this.driver = driver;
     }
 
     public void clickCookieButton() {
         driver.findElement(btnCookie).click();
     }
+
     public void clickOrderButtonInTheHeader() {
         driver.findElement(btnOrderInTheHeader).click();
     }
@@ -29,13 +31,21 @@ public class MainPage {
         driver.findElement(btnOrderInTheMiddle).click();
     }
 
+    public void clickOrderButton(String button) {
+        if(button.equals(OrderButtons.HEADER_ORDER_BUTTON)){
+            clickOrderButtonInTheHeader();
+        }else{
+            clickOrderButtonInTheMiddle();
+        }
+    }
+
     public void clickQuestion(String myQuestion) {
         WebElement question = driver.findElement(By.xpath(".//div[(@class='accordion__button') and (text() ='" + myQuestion + "')]"));
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", question);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", question);
         question.click();
     }
 
-    public WebElement findAnswerByQuestion(String myQuestion){
+    public WebElement findAnswerByQuestion(String myQuestion) {
         WebElement question = driver.findElement(By.xpath(".//div[(@class='accordion__button') and (text() ='" + myQuestion + "')]"));
         String id = question.getAttribute("id");
         return driver.findElement(By.xpath(".//div[@aria-labelledby = '" + id + "']"));
