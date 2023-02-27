@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 public class MainPage {
@@ -27,8 +28,16 @@ public class MainPage {
         driver.findElement(btnOrderInTheMiddle).click();
     }
 
-    public void clickQuestion(String question) {
-        driver.findElement(By.xpath(".//div[@class='accordion__heading']/div[text() =" + question + "]")).click();
+    public void clickQuestion(String myQuestion) {
+        WebElement question = driver.findElement(By.xpath(".//div[(@class='accordion__button') and (text() ='" + myQuestion + "')]"));
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", question);
+        question.click();
+    }
+
+    public WebElement findAnswerByQuestion(String myQuestion){
+        WebElement question = driver.findElement(By.xpath(".//div[(@class='accordion__button') and (text() ='" + myQuestion + "')]"));
+        String id = question.getAttribute("id");
+        return driver.findElement(By.xpath(".//div[@aria-labelledby = '" + id + "']"));
     }
 
 }
