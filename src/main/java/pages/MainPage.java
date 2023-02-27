@@ -11,20 +11,21 @@ public class MainPage {
     private final By btnOrderInTheHeader = By.xpath(".//div[@class='Header_Nav__AGCXC']/button[@class='Button_Button__ra12g']");
     //Кнопка "Заказать" в середине
     private final By btnOrderInTheMiddle = By.className("Button_Middle__1CSJM");
-    //Вопрос о важном ???
-    private final By accordionQuestion = By.className("accordion__item");
-    //Ответ на вопрос ???
-    private final By accordionAnswer = By.className("accordion__panel");
+    //Кнопка куки
+    private final By btnCookie = By.className("App_CookieButton__3cvqF");
 
     public MainPage (WebDriver driver) {
         this.driver = driver;
     }
 
-    public void clickOrderInTheHeaderButton() {
+    public void clickCookieButton() {
+        driver.findElement(btnCookie).click();
+    }
+    public void clickOrderButtonInTheHeader() {
         driver.findElement(btnOrderInTheHeader).click();
     }
 
-    public void clickOrderInTheMiddleButton() {
+    public void clickOrderButtonInTheMiddle() {
         driver.findElement(btnOrderInTheMiddle).click();
     }
 
